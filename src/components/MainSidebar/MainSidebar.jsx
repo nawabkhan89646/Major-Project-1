@@ -79,7 +79,7 @@ function MainSidebar() {
         const snapshot = await uploadBytes(storageRef, file);
         const url = await getDownloadURL(snapshot.ref);
 
-        await addDoc(collection(db, "myFiles"), {
+        const res = await addDoc(collection(db, "myFiles"), {
           timestamp: serverTimestamp(),
           fileName: file.name,
           fileURL: url,
@@ -88,9 +88,14 @@ function MainSidebar() {
           userId: currentUser.uid,
         });
 
-        setUploading(false);
-        setFile(null);
-        setModal(false);
+        console.log(res + " file uploading" )
+
+        if(res.ok){
+          setUploading(false);
+          setFile(null);
+          setModal(false);
+        }
+
       } catch (error) {
         console.error("Error uploading file: ", error);
         setUploading(false);
